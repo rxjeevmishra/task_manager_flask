@@ -26,5 +26,22 @@ def complete(task_id):
     task_manager.complete_task(task_id)
     return redirect(url_for("index"))
 
+@app.route("/delete/<int:task_id>", methods=["POST"])  # <-- Fixed
+def delete_task(task_id):
+    task_manager.delete_task(task_id)
+    return redirect(url_for("index"))
+
+@app.route("/edit/<int:task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    if request.method == "POST":
+        title = request.form["title"]
+        desc = request.form["desc"]
+        due_date = request.form["due"]
+        priority = request.form["priority"]
+        task_manager.update_task(task_id, title, desc, due_date, priority)
+        return redirect(url_for("index"))
+    task = task_manager.get_task(task_id)
+    return render_template("edit_task.html", task=task)
+
 if __name__ == "__main__":
     app.run(debug=True)
