@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Task Manager</title>
+</head>
+<body>
+    <h1>Task Manager</h1>
+    <form method="POST" action="/add">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="text" name="desc" placeholder="Description">
+        <input type="date" name="due">
+        <select name="priority">
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+        </select>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <strong>{{ task.title }}</strong> - {{ task.desc }} - Due: {{ task.due }} - Priority: {{ task.priority }}
+                {% if task.completed %}
+                    <span>✅ Completed</span>
+                {% else %}
+                    <form method="POST" action="/complete/{{ task.id }}" style="display:inline;">
+                        <button type="submit">Mark Complete</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
