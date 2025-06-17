@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from flask_cors import CORS
 from task_manager import TaskManager
+import os
 
 app = Flask(__name__)
 CORS(app)
@@ -26,7 +27,7 @@ def complete(task_id):
     task_manager.complete_task(task_id)
     return redirect(url_for("index"))
 
-@app.route("/delete/<int:task_id>", methods=["POST"])  # <-- Fixed
+@app.route("/delete/<int:task_id>", methods=["POST"])
 def delete_task(task_id):
     task_manager.delete_task(task_id)
     return redirect(url_for("index"))
@@ -44,4 +45,5 @@ def edit_task(task_id):
     return render_template("edit_task.html", task=task)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))  # Render sets PORT
+    app.run(host="0.0.0.0", port=port)
